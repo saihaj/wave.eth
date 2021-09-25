@@ -1,15 +1,29 @@
 import { ethers } from 'hardhat'
-import { Contract, ContractFactory } from 'ethers'
+import { WavePortal, WavePortal__factory } from '../typechain'
 
 const main = async () => {
+  const [owner, randomPerson] = await ethers.getSigners()
   // get the contract
-  const waveContractFactory: ContractFactory = await ethers.getContractFactory(
-    'WavePortal',
-  )
+  const waveContractFactory: WavePortal__factory =
+    await ethers.getContractFactory('WavePortal')
   //  deploy the contract
-  const waveContract: Contract = await waveContractFactory.deploy()
+  const waveContract: WavePortal = await waveContractFactory.deploy()
   await waveContract.deployed()
+
   console.log('Contract deployed to:', waveContract.address)
+  console.log('Contract deployed by:', owner.address)
+
+  let waveCount
+  waveCount = await waveContract.getTotalWaves()
+
+  let waveTxn = await waveContract.wave()
+  await waveTxn.wait()
+  waveCount = await waveContract.getTotalWaves()
+
+  waveTxn = await waveContract.connect(randomPerson).wave()
+  await waveTxn.wait()
+
+  waveCount = await waveContract.getTotalWaves()
 }
 
 const runMain = async () => {
