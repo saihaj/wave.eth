@@ -5,11 +5,13 @@
   "author": "Saihajpreet Singh <saihajpreet.singh@gmail.com> (https://github.com/saihaj)",
   "license": "MIT",
   "scripts": {
+    "start:node": "hardhat node",
     "accounts": "hardhat accounts",
     "compile": "hardhat compile",
     "test": "hardhat test",
     "format": "prettier . --write",
-    "script": "hardhat run scripts/run.ts"
+    "script": "hardhat run scripts/run.ts",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
