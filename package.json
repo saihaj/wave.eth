@@ -12,6 +12,7 @@
     "format": "prettier . --write",
     "script": "hardhat run scripts/run.ts",
     "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "deploy:testnet": "hardhat run scripts/deploy.ts --network rinkeby",
     "dev": "vite",
     "build": "tsc && vite build"
   },
@@ -27,6 +28,7 @@
     "@types/react-dom": "^17.0.9",
     "@vitejs/plugin-react": "^1.0.1",
     "chai": "^4.3.4",
+    "dotenv": "^10.0.0",
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.4.7",
     "hardhat": "^2.6.4",
