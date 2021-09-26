@@ -1,0 +1,37 @@
+:root {
+  --light-primary: #fffded;
+  --dark-primary: #020402;
+}
+
+* {
+  background-color: var(--dark-primary);
+  color: var(--light-primary);
+  font-family: 'Roboto';
+}
+
+main.home {
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  margin-top: 40vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: url('https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/285/waving-hand_1f44b.png'),
+    auto;
+}
+
+main.home h1 {
+  margin: 0;
+  font-size: 3rem;
+}
+
+main.home h3 {
+  text-align: center;
+}
+
+main.home button {
+  cursor: pointer;
+  border-color: var(--light-primary);
+  border-radius: 40px;
+  padding: 5px 20px;
+}
