@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import { ethers } from 'ethers'
 import Reward from 'react-rewards'
 import Loader from 'react-loader-spinner'
-import { Dialog, DialogOverlay, DialogContent } from '@reach/dialog'
+import { Dialog } from '@reach/dialog'
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 import '@reach/dialog/styles.css'
 
@@ -10,7 +10,7 @@ import { WavePortal } from '../typechain'
 import './App.css'
 import CONTRACT_ABI from './WavePortal.json'
 
-const CONTRACT_ADDRESS = '0x60934227d28ffCAee425a8F159cd06c21FF41244'
+const CONTRACT_ADDRESS = '0x6458123F27BDDcfb1177D972F81692c5b47aff18'
 
 const App = () => {
   const [account, setAccount] = useState()

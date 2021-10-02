@@ -11,7 +11,10 @@ const main = async () => {
   const Token: WavePortal__factory = await ethers.getContractFactory(
     'WavePortal',
   )
-  const portal: WavePortal = await Token.deploy()
+  const portal: WavePortal = await Token.deploy({
+    // @ts-ignore Typings aren't that good
+    value: ethers.utils.parseEther('0.001'),
+  })
 
   console.log('WavePortal address: ', portal.address)
 }
