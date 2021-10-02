@@ -7,12 +7,13 @@
   "scripts": {
     "start:node": "hardhat node",
     "accounts": "hardhat accounts",
-    "compile": "hardhat compile",
+    "compile": "hardhat compile && npm run compiled-json",
+    "compiled-json": "cp ./artifacts/contracts/WavePortal.sol/WavePortal.json ./src/WavePortal.json",
     "test": "hardhat test",
     "format": "prettier . --write",
     "script": "hardhat run scripts/run.ts",
-    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
-    "deploy:testnet": "hardhat run scripts/deploy.ts --network rinkeby",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost && npm run compiled-json",
+    "deploy:testnet": "hardhat run scripts/deploy.ts --network rinkeby && npm run compiled-json",
     "dev": "vite",
     "build": "tsc && vite build"
   },
