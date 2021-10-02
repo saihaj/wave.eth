@@ -35,3 +35,61 @@ main.home button {
   border-radius: 40px;
   padding: 5px 20px;
 }
+
+main.home .waves {
+  margin-top: 2rem;
+  max-height: 40rem;
+  max-width: 40rem;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-width: 0.5rem;
+  scrollbar-color: #fffded80;
+}
+
+main.home .waves::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+main.home .waves::-webkit-scrollbar-track {
+  background: #fffded80;
+}
+
+main.home .waves::-webkit-scrollbar-thumb {
+  background-color: var(--dark-primary);
+  border-radius: 1rem;
+  border: 3px solid var(--light-primary);
+}
+
+.modal {
+  background-color: var(--light-primary);
+  border-radius: 0.5rem;
+  margin-top: 15rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 0.5rem;
+  border-width: 1px;
+  color: var(--dark-primary);
+  background-color: var(--light-primary);
+}
+
+.modal button {
+  margin-top: 0.5rem;
+  width: 25%;
+  border-radius: 0.5rem;
+  border-width: 1px;
+  padding: 5px 20px;
+  cursor: pointer;
+  color: var(--dark-primary);
+  background-color: var(--light-primary);
+}
+
+.modal button:hover {
+  color: var(--light-primary);
+  background-color: var(--dark-primary);
+}

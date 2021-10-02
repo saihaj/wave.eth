@@ -2,17 +2,24 @@ import { useEffect, useState, useRef } from 'react'
 import { ethers } from 'ethers'
 import Reward from 'react-rewards'
 import Loader from 'react-loader-spinner'
+import { Dialog, DialogOverlay, DialogContent } from '@reach/dialog'
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
+import '@reach/dialog/styles.css'
 
 import { WavePortal } from '../typechain'
 import './App.css'
 import CONTRACT_ABI from './WavePortal.json'
 
-const CONTRACT_ADDRESS = '0xf77D3817B7b66746580c0F9912cd24Ad9b085217'
+const CONTRACT_ADDRESS = '0x60934227d28ffCAee425a8F159cd06c21FF41244'
 
 const App = () => {
   const [account, setAccount] = useState()
   const [pendingTransaction, setPendingTransaction] = useState(false)
+  const [openModal, setOpenModal] = useState(false)
+  const [message, setMessage] = useState('Hello')
+  const [allWaves, setAllWaves] = useState<
+    Array<{ address: string; timestamp: Date; message: string }>
+  >([])
   const waveBtn = useRef()
 
   const checkIfWalletIsConnected = async () => {
@@ -78,7 +85,7 @@ const App = () => {
       console.log('Retrieved total wave count...', count.toNumber())
 
       setPendingTransaction(true)
-      const waveTxn = await contract.wave()
+      const waveTxn = await contract.wave(message)
       console.log('Mining...', waveTxn.hash)
       await waveTxn.wait()
       console.log('Mined!', waveTxn.hash)
@@ -98,21 +105,81 @@ const App = () => {
     }
   }
 
+  const getAllWaves = async () => {
+    try {
+      // @ts-ignore
+      const { ethereum } = window
+
+      if (!ethereum) {
+        console.log("Ethereum object doesn't exist!")
+        return
+      }
+
+      const provider = new ethers.providers.Web3Provider(ethereum)
+      const signer = provider.getSigner()
+      const contract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        CONTRACT_ABI.abi,
+        signer,
+      ) as WavePortal
+
+      const waves = await contract.getAllWaves()
+      console.log('Retrieved all waves...', waves)
+
+      const wavesCleaned = []
+      waves.forEach((wave) => {
+        wavesCleaned.push({
+          address: wave.waver,
+          timestamp: new Date(wave.timestamp.toNumber() * 1000),
+          message: wave.message,
+        })
+      })
+
+      setAllWaves(wavesCleaned)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   // This runs our function when the page loads.
   useEffect(() => {
     checkIfWalletIsConnected()
+    getAllWaves()
   }, [])
+
+  const Modal = () => (
+    <Dialog
+      className="modal"
+      isOpen={openModal}
+      onDismiss={() => setOpenModal(false)}
+    >
+      <input
+        type="textarea"
+        onChange={(e) => setMessage(e.target.value)}
+        value={message}
+      />
+      <button
+        onClick={() => {
+          wave()
+          setOpenModal(false)
+        }}
+      >
+        Send
+      </button>
+    </Dialog>
+  )
 
   return (
     <main className="home">
       <h1>Hey there</h1>
       <h3>I am Saihaj. Connect your Ethereum wallet and wave at me.</h3>
+      <Modal />
       {account ? (
         <Reward ref={waveBtn} type="memphis">
           {pendingTransaction ? (
             <Loader width={60} type="Circles" color="var(--light-primary)" />
           ) : (
-            <button onClick={wave}>Wave at me</button>
+            <button onClick={() => setOpenModal(true)}>Wave at me</button>
           )}
         </Reward>
       ) : (
@@ -120,6 +187,16 @@ const App = () => {
           Connect Wallet
         </button>
       )}
+      <div className="waves">
+        {allWaves.map((wave, index) => {
+          return (
+            <div key={index}>
+              {wave.address} said {wave.message} on{' '}
+              {wave.timestamp.toLocaleDateString()}
+            </div>
+          )
+        })}
+      </div>
     </main>
   )
 }
