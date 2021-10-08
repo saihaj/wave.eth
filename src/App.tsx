@@ -3,6 +3,8 @@ import { ethers } from 'ethers'
 import Reward from 'react-rewards'
 import Loader from 'react-loader-spinner'
 import { Dialog } from '@reach/dialog'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 import '@reach/dialog/styles.css'
 
@@ -64,6 +66,7 @@ const App = () => {
   }
 
   const wave = async () => {
+    let waveTxn
     try {
       // @ts-ignore
       const { ethereum } = window
@@ -88,7 +91,19 @@ const App = () => {
       // If user gets lucky more code runs means we need more gas which
       // This helps avoid of gas because metamask underestimates
       // If all gas is not used it gets refunded
-      const waveTxn = await contract.wave(message, { gasLimit: 300000 })
+      waveTxn = await contract.wave(message, { gasLimit: 300000 })
+      toast.info(
+        <div>
+          Transaction Started. See{' '}
+          <a
+            target="_blank"
+            rel="noopener"
+            href={`https://rinkeby.etherscan.io/tx/${waveTxn.hash!}`}
+          >
+            Rinkeby Etherscan
+          </a>
+        </div>,
+      )
       console.log('Mining...', waveTxn.hash)
       await waveTxn.wait()
       console.log('Mined!', waveTxn.hash)
@@ -104,6 +119,18 @@ const App = () => {
     } catch (error) {
       // @ts-ignore
       waveBtn?.current.punishMe()
+      toast.error(
+        <div>
+          Transaction Failed. See{' '}
+          <a
+            target="_blank"
+            rel="noopener"
+            href={`https://rinkeby.etherscan.io/tx/${waveTxn.hash!}`}
+          >
+            Rinkeby Etherscan
+          </a>
+        </div>,
+      )
       console.log(error)
     }
   }
@@ -174,16 +201,25 @@ const App = () => {
 
   return (
     <main className="home">
+      <ToastContainer
+        position="top-center"
+        hideProgressBar
+        closeOnClick
+        theme="dark"
+        autoClose={false}
+      />
       <h1>Hey there</h1>
       <h3>I am Saihaj. Connect your Ethereum wallet and wave at me.</h3>
       <Modal />
       {account ? (
         <Reward ref={waveBtn} type="memphis">
-          {pendingTransaction ? (
-            <Loader width={60} type="Circles" color="var(--light-primary)" />
-          ) : (
-            <button onClick={() => setOpenModal(true)}>Wave at me</button>
-          )}
+          <div className="waveButton">
+            {pendingTransaction ? (
+              <Loader width={60} type="Circles" color="var(--light-primary)" />
+            ) : (
+              <button onClick={() => setOpenModal(true)}>Wave at me</button>
+            )}
+          </div>
         </Reward>
       ) : (
         <button ref={waveBtn} className="waveButton" onClick={connectWallet}>

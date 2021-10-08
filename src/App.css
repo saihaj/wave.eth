@@ -29,7 +29,7 @@ main.home h3 {
   text-align: center;
 }
 
-main.home button {
+main.home .waveButton button {
   cursor: pointer;
   border-color: var(--light-primary);
   border-radius: 40px;
