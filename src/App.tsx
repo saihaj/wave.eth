@@ -85,7 +85,10 @@ const App = () => {
       console.log('Retrieved total wave count...', count.toNumber())
 
       setPendingTransaction(true)
-      const waveTxn = await contract.wave(message)
+      // If user gets lucky more code runs means we need more gas which
+      // This helps avoid of gas because metamask underestimates
+      // If all gas is not used it gets refunded
+      const waveTxn = await contract.wave(message, { gasLimit: 300000 })
       console.log('Mining...', waveTxn.hash)
       await waveTxn.wait()
       console.log('Mined!', waveTxn.hash)
