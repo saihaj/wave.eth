@@ -10,7 +10,7 @@ import { WavePortal } from '../typechain'
 import './App.css'
 import CONTRACT_ABI from './WavePortal.json'
 
-const CONTRACT_ADDRESS = '0x6458123F27BDDcfb1177D972F81692c5b47aff18'
+const CONTRACT_ADDRESS = '0xB8b8EAe71e659C3265714Cf3b944FB6153A3C397'
 
 const App = () => {
   const [account, setAccount] = useState()
