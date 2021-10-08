@@ -14,14 +14,30 @@ import CONTRACT_ABI from './WavePortal.json'
 
 const CONTRACT_ADDRESS = '0xB8b8EAe71e659C3265714Cf3b944FB6153A3C397'
 
+const WarningIcon = () => (
+  <svg
+    className="warning-icon"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+    ></path>
+  </svg>
+)
+
 const App = () => {
   const [account, setAccount] = useState()
-  const [pendingTransaction, setPendingTransaction] = useState(false)
+  const [pendingTransaction, setPendingTransaction] = useState()
   const [openModal, setOpenModal] = useState(false)
   const [message, setMessage] = useState('Hello')
   const [allWaves, setAllWaves] = useState<
     Array<{ address: string; timestamp: Date; message: string }>
   >([])
+  const [transactionError, setTransactionError] = useState<undefined | string>()
   const waveBtn = useRef()
 
   const checkIfWalletIsConnected = async () => {
@@ -119,6 +135,7 @@ const App = () => {
     } catch (error) {
       // @ts-ignore
       waveBtn?.current.punishMe()
+      setTransactionError(waveTxn.hash!)
       toast.error(
         <div>
           Transaction Failed. See{' '}
@@ -215,7 +232,25 @@ const App = () => {
         <Reward ref={waveBtn} type="memphis">
           <div className="waveButton">
             {pendingTransaction ? (
-              <Loader width={60} type="Circles" color="var(--light-primary)" />
+              transactionError ? (
+                <div className="transaction-error">
+                  <WarningIcon />
+                  See on{' '}
+                  <a
+                    target="_blank"
+                    rel="noopener"
+                    href={`https://rinkeby.etherscan.io/tx/${transactionError}`}
+                  >
+                    Rinkeby Etherscan
+                  </a>
+                </div>
+              ) : (
+                <Loader
+                  width={60}
+                  type="Circles"
+                  color="var(--light-primary)"
+                />
+              )
             ) : (
               <button onClick={() => setOpenModal(true)}>Wave at me</button>
             )}

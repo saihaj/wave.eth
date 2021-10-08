@@ -29,6 +29,18 @@ main.home h3 {
   text-align: center;
 }
 
+main.home svg.warning-icon {
+  height: 3rem;
+  width: 3rem;
+  stroke: red;
+}
+
+main.home div.transaction-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 main.home .waveButton button {
   cursor: pointer;
   border-color: var(--light-primary);
